@@ -54,4 +54,18 @@ $(document).ready(function() {
         })}, 900);
 });
 
-//function createCycle()
+//aight lets write this fucker
+//it needs to call the cloud funciton CreateWasher/DryerProfile with arg string "temp speed name" or "temp name"
+//"prefs" should be a string in the above format
+function createCycle(type, prefs) {
+    var deviceID = "2f0059000e51353532343635";
+    var accessToken = "4dcf12c1f71b9601b0e988744eedbf79c14252af";
+    var baseURL = "https://api.particle.io/v1/devices/";
+    var funcName = type; //either washer or dryer function
+    requestURL = baseURL + deviceID + "/" + funcName + "/?access_token=" + accessToken;
+
+    $.post(requestURL, prefs, function() {
+        alert("Profile Created");
+        //location.href = "home.html" probably dont want this on the create profile
+    });
+}
