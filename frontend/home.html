@@ -1,16 +1,35 @@
 <!DOCTYPE HTML>
 <html>
-    <script type="text/javascript" charset="utf-8" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script type="text/javascript" src="basescript.js" charset="utf-8"></script>
-    <title>Whatever We Wanna Call This...</title>
+    <head>
+        <link rel="stylesheet" type="text/css" href="home.css">
+        <script type="text/javascript" charset="utf-8" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script type="text/javascript" src="basescript.js" charset="utf-8"></script>
+        <title>Whatever We Wanna Call This...</title>
+    </head>
+    <h1 class="header titlebar">Laundry of the future</h2>
+    <div class="menubar">menubar. probs not needed but it looks nice</div>
     <body>
-        <p>Right now I only set up the "preset 1" stuff, the other links either don't work or have placeholders there</p>
-        <h1>Select your profile: </h1>
+    <div class="column">
+        <h1 class="titlebar">Select your profile: </h1>
+        <div class="buttonholder">
             <button id="user1" onclick="userLogin('user1')">User 1</button> 
             <button id="user2" onclick="userLogin('user2')">User 2</button> 
             <button id="user3" onclick="userLogin('user3')">User 3</button>
-        <h2>Or select a preset profile: </h2>
+        </div>
+        <h2 class="titlebar">Or select a preset profile: </h2>
+        <div class="buttonholder">
             <button id="preset1" onclick="userLogin('preset1')">Preset 1</button> 
             <button id="preset2" onclick="userLogin('preset2')">Preset 2</button> 
             <button id="preset3" onclick="userLogin('preset3')">Preset 3</button>
+        </div>
+    </div>
+    <div class="column">
+        <div class="right">
+            <h2 class="titlebar">Washer</h2>
+                <p id="washerdata">N/A (Looks like the JS isn't working...)</p>
+            <h2 class="titlebar">Dryer</h2>
+                <p id="dryerdata">N/A (Looks like the JS isn't working...)</p>
+        </div>
+    </div>
     </body>
+    <div class="footer">Boring footer information blah blah blah   </div>

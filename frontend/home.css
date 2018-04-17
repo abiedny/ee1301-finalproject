@@ -1,0 +1,71 @@
+.titlebar {
+    text-align: left;
+    border-bottom: 2px solid gainsboro;
+    padding-bottom: 10px;
+    margin-top: 15px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+button {
+    text-align: center;
+    border: none;
+    border-radius: 6px;
+    font-size: 20px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    background-color: lightblue;
+    transition-duration: 0.4s;
+    display: inline-block;
+    padding: 15px 32px;
+}
+button:hover {
+    background-color: gainsboro;
+    color: grey;
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
+.buttonholder {
+    text-align: left;
+}
+.footer {
+    background-color:gainsboro;
+    text-align: left;
+    padding: 10px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    color: grey;
+    position: fixed;
+    left: 0px;
+    bottom: 0px;
+    width: 100%;
+}
+.header {
+    background-color: lightblue;
+    text-align: left;
+    padding: 15px;
+    margin-top: -10px;
+    margin-left: -10px;
+    margin-right: -8px;
+    margin-bottom: 0px;
+}
+.menubar {
+    background-color:gainsboro;
+    text-align: left;
+    padding: 10px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    color: grey;
+    margin-left: -10px;
+    margin-right: -8px;
+    margin-top: 0px;
+}
+.column {
+    float: left;
+    width: 50%;
+}
+.right {
+    border: 2px solid gainsboro;
+    margin: 10px;
+    padding: 10px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+@media screen and (max-width: 600px) {
+    .column {
+        width: 100%;
+    }
+}

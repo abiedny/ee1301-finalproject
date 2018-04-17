@@ -31,4 +31,9 @@ function runDryer(setting) {
     });
 }
 
+//this will be the code for the updating cloud variables from the washer and dryer. It will replace the <p> tags under washer and dryer
+/*$(document).ready(function() {
+    $("#washerdata").html("")
+})*/
+
 //function createCycle()
