@@ -30,3 +30,5 @@ function runDryer(setting) {
         location.href = "home.html";
     });
 }
+
+//function createCycle()
