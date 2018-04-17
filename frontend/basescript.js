@@ -31,9 +31,27 @@ function runDryer(setting) {
     });
 }
 
-//this will be the code for the updating cloud variables from the washer and dryer. It will replace the <p> tags under washer and dryer
-/*$(document).ready(function() {
-    $("#washerdata").html("")
-})*/
+//replaces the <p> tags under washer and dryer
+//any post or json crap needs to be tested
+$(document).ready(function() {
+    var deviceID = "2f0059000e51353532343635";
+    var accessToken = "4dcf12c1f71b9601b0e988744eedbf79c14252af";
+    var baseURL = "https://api.particle.io/v1/devices/";
+
+    //just add more $.getJSON calls if there's more variables to display
+    var varName = "WasherTimeLeft";
+    requestURL = baseURL + deviceID + "/" + varName + "/?access_token=" + accessToken;
+    setInterval(function() {
+        $.getJSON(requestURL, function(json) {
+            $("#washerdata").html("Time left: " + json.result);
+        })}, 900);
+
+    varName = "DryerTimeLeft";
+    requestURL = baseURL + deviceID + "/" + varName + "/?access_token=" + accessToken;
+    setInterval(function() {
+        $.getJSON(requestURL, function(json) {
+            $("#dryerdata").html("Time left: " + json.result);
+        })}, 900);
+});
 
 //function createCycle()
