@@ -38,7 +38,8 @@ $(document).ready(function() {
     var accessToken = "4dcf12c1f71b9601b0e988744eedbf79c14252af";
     var baseURL = "https://api.particle.io/v1/devices/";
 
-    //just add more $.getJSON calls if there's more variables to display
+    //ALL OF THESE NEED TO BE CLOUD VARIABLES AND ADDED TO THE C++
+    //Washer time left
     var varName = "WasherTimeLeft";
     requestURL = baseURL + deviceID + "/" + varName + "/?access_token=" + accessToken;
     setInterval(function() {
@@ -46,15 +47,32 @@ $(document).ready(function() {
             $("#washerdata").html("Time left: " + json.result);
         })}, 900);
 
+    //Dryer time left
     varName = "DryerTimeLeft";
     requestURL = baseURL + deviceID + "/" + varName + "/?access_token=" + accessToken;
     setInterval(function() {
         $.getJSON(requestURL, function(json) {
             $("#dryerdata").html("Time left: " + json.result);
         })}, 900);
+
+    //Current washer cycle
+    varName = "WasherCycle"
+    requestURL = baseURL + deviceID + "/" + varName + "/?access_token=" + accessToken;
+    setInterval(function() {
+        $.getJSON(requestURL, function(json) {
+            $("#washercycle").html("Current Cycle: " + json.result);
+        })}, 900);
+    
+    //Current dryer cycle
+    varName = "DryerCycle"
+    requestURL = baseURL + deviceID + "/" + varName + "/?access_token=" + accessToken;
+    setInterval(function() {
+        $.getJSON(requestURL, function(json) {
+            $("#dryercycle").html("Current Cycle: " + json.result);
+        })}, 900);
+
 });
 
-//aight lets write this fucker
 //it needs to call the cloud funciton CreateWasher/DryerProfile with arg string "temp speed name" or "temp name"
 //"prefs" should be a string in the above format
 function createCycle(type, prefs) {

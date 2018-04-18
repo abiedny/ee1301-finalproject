@@ -18,7 +18,7 @@ class dryer {
       sstream(a) >> temp >> name;
       return 1;
     }
-    int RunDryer(string a) { //we can only return ints but they can be pointers....
+    int RunDryer(string profile) { //we can only return ints but they can be pointers....
       return 1;
     }
     int StopDryer(string a) {
@@ -51,7 +51,7 @@ void setup() {
   Particle.function("CreateDryerProfile", myDryer.CreateDryerProfile);
   Particle.function("RunWasher", myWasher.RunWasher);
   Particle.function("StopWasher", myWasher.StopWasher);
-  Particle.fucntion("CreateWasherProfile", myWasher.CreateWasherProfile);
+  Particle.function("CreateWasherProfile", myWasher.CreateWasherProfile);
   Particle.variable("owner", owner);
   Particle.variable("")
 }
