@@ -1,16 +1,29 @@
 <!DOCTYPE HTML>
 <html>
-    <script type="text/javascript" charset="utf-8" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <head>
+        <link rel="stylesheet" type="text/css" href="home.css">
+        <script type="text/javascript" charset="utf-8" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script type="text/javascript" src="basescript.js" charset="utf-8"></script>
+        <title>Whatever We Wanna Call This...</title>
+    </head>
+    <h1 class="header titlebar">Laundry of the future</h2>
+    <div class="menubar">menubar. probs not needed but it looks nice</div>
     <body>
-    <title> Whatever We Wanna Call This Thing</title>
-        <h1>You have selected preset one</h1>
-            <p>This seting is intended for blah blah give an explanation here</p>
-            <p>These buttons just make a post request to the particle that calls their corresponding functions in the c++ particle code, with argument based on the user/preset pressing the button</p>
-            <p>If the button request is successful, it takes you back to the homepage. Nothing happens now because nothing else is coded</p>
-    <script type="text/javascript" src="basescript.js" charset="utf-8"></script>
+    <div class="column">
+        <h1 class="titlebar">Preset 3</h1>
+        <p class="explaintext">This is the explanation of what preset 1 does. Blah blah blah</p>
         <button id="preset1wash" onclick="runWasher('preset1')">Wash!</button>
         <button id="preset1dry" onclick="runDryer('preset1')">Dry!</button>
-
-
+    </div>
+    <div class="column">
+        <div class="right">
+            <h2 class="titlebar">Washer</h2>
+                <p id="washerdata">N/A (Looks like the JS isn't working...)</p>
+                <p id="washercycle">Current cycle is unknown</p>
+            <h2 class="titlebar">Dryer</h2>
+                <p id="dryerdata">N/A (Looks like the JS isn't working...)</p>
+                <p id="dryercycle">Current cycle is unknown</p>
+        </div>
+    </div>
     </body>
-</html>
+    <div class="footer">Boring footer information blah blah blah   </div>
