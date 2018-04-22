@@ -18,7 +18,7 @@ class dryer {
       sstream(a) >> temp >> name;
       return 1;
     }
-    int RunDryer(string profile) { //we can only return ints but they can be pointers....
+    int RunDryer(string profile) { //This function and runwasher will accept a string in the form of "temp name"
       return 1;
     }
     int StopDryer(string a) {
@@ -35,7 +35,7 @@ class washer {
       sstream(a) >> temp >> speed >> name;
       return 1;
     }
-    int RunWasher(string profile) {
+    int RunWasher(string profile) { //argument is string in the form of "temp speed name"
       return 1;
     }
     int StopWasher(string a) {
