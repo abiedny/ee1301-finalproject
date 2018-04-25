@@ -12,11 +12,16 @@
     <div class="column">
         <h1 class="titlebar">Welcome, User 2</h1>
         <p class="explaintext">Select a cycle, and run it</p>
-        <button>Wash!</button>
-        <button>Dry!</button>
-        <p class="explaintext">Still gonna need the code here... have a slider with all user cycles like a form? idk take a look at the jquery ui page for inspiration buttons are dummies rn
-        Createcycle button does nothing yet, maybe have onclick prompt for the type (w/d) and then prompt for input of temp/tempandspeed?</p>
-        <button>Create Cycle</button>
+        <select id="cyclelist">
+            <option value="" disabled="disabled" selected="selected">Please select a cycle</option>
+            <option value="whatever we want">Custom Wash Cycle 1</option>
+            <option value="whatever we want">Custom Dryer Cycle 2</option>
+            <option value="whatever we want">Custom Whatever 3</option>
+        </select>
+        <button onclick="runWasher()">Wash!</button>
+        <button onclick="runDryer()">Dry!</button>
+        <p class="explaintext">Create a custom cycle to choose your own washing and/or drying preferences</p>
+        <button onclick="popupCycleBox()">Create Cycle</button>
     </div>
     <div class="column">
         <div class="right">
@@ -26,6 +31,25 @@
             <h2 class="titlebar">Dryer</h2>
                 <p id="dryerdata">N/A (Looks like the JS isn't working...)</p>
                 <p id="dryercycle">Current cycle is unknown</p>
+        </div>
+    </div>
+    <div id="createcyclebox" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p class="explaintext">Select the cycle type, and the options for your custom cycle.</p>
+            <form id="createcycleform">
+                <input type="radio" name="type" value="washer"> Washer
+                <input type="radio" name="type" value="dryer"> Dryer <br>
+                Cycle Name:<br>
+                <input type="text" name="cyclename"><br>
+                Cycle Time (seconds):<br>
+                <input type="text" name="time"><br>
+                Cycle Speed (speed units?):<br>
+                <input type="text" name="speed"><br>
+                Cycle Temp (degrees F) (washers only):<br>
+                <input type="text" name="temp">
+            </form>
+            <button onclick="createCycle()">Create Cycle</button>
         </div>
     </div>
     </body>

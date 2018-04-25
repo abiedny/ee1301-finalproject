@@ -3,7 +3,9 @@ function userLogin(username) {
     location.href = gotohere;
 }
 
-function runWasher(setting) {
+//WILL need to add ability for these to post the args
+function runWasher() {
+    setting = document.getElementById('cyclelist').value;
     var deviceID = "2f0059000e51353532343635";
     var accessToken = "4dcf12c1f71b9601b0e988744eedbf79c14252af";
     var baseURL = "https://api.particle.io/v1/devices/";
@@ -17,7 +19,8 @@ function runWasher(setting) {
     });
 }
 
-function runDryer(setting) {
+function runDryer() {
+    setting = document.getElementById('cyclelist').value;
     var deviceID = "2f0059000e51353532343635";
     var accessToken = "4dcf12c1f71b9601b0e988744eedbf79c14252af";
     var baseURL = "https://api.particle.io/v1/devices/";
@@ -29,6 +32,34 @@ function runDryer(setting) {
         //same thing here
         location.href = "home.html";
     });
+}
+function popupCycleBox() {
+    var modal = document.getElementById('createcyclebox');
+    var span = document.getElementsByClassName("close")[0];
+    span.onclick = function() {
+        modal.style.display = "none";
+    }
+    modal.style.display = "block";
+}
+//I can hardly believe it but this shit is working?!
+//Now we need to make it so the added custom cycles persist...
+//Also once that happens we need to differentiate between users
+function createCycle() {
+    var type = document.forms[0].elements.namedItem("type").value;
+    var name = document.forms[0].elements.namedItem("cyclename").value;
+    var speed = document.forms[0].elements.namedItem("speed").value;
+    var time = document.forms[0].elements.namedItem("time").value;
+    var temp = document.forms[0].elements.namedItem("temp").value
+    var option = document.createElement("option");
+    option.innerHTML = name;
+    if (type === "dryer") {
+        option.value = name + " " + speed + " " + time; //Whatever form the post string needs to be in, because value is the post data
+    }
+    else if (type === "washer") {
+        option.value = name + " " + speed + " " + time + " " + temp;
+    }
+    $("#cyclelist").append(option);
+    document.getElementById('createcyclebox').style.display = "none";
 }
 
 //replaces the <p> tags under washer and dryer
@@ -72,18 +103,3 @@ $(document).ready(function() {
         })}, 900);
 
 });
-
-//it needs to call the cloud funciton CreateWasher/DryerProfile with arg string "temp speed name" or "temp name"
-//"prefs" should be a string in the above format
-function createCycle(type, prefs) {
-    var deviceID = "2f0059000e51353532343635";
-    var accessToken = "4dcf12c1f71b9601b0e988744eedbf79c14252af";
-    var baseURL = "https://api.particle.io/v1/devices/";
-    var funcName = type; //either washer or dryer function
-    requestURL = baseURL + deviceID + "/" + funcName + "/?access_token=" + accessToken;
-
-    $.post(requestURL, prefs, function() {
-        alert("Profile Created");
-        //location.href = "home.html" probably dont want this on the create profile
-    });
-}

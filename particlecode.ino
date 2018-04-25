@@ -19,6 +19,7 @@ class dryer {
       return 1;
     }
     int RunDryer(string profile) { //This function and runwasher will accept a string in the form of "temp name"
+    //make sure to have a cloud variable that displays time left in cycle, and name of cycle
       return 1;
     }
     int StopDryer(string a) {
@@ -35,7 +36,8 @@ class washer {
       sstream(a) >> temp >> speed >> name;
       return 1;
     }
-    int RunWasher(string profile) { //argument is string in the form of "temp speed name"
+    int RunWasher(string profile) { //argument is string in the form of "length temp speed name"
+    //make sure to have a cloud variable that displays time left in cycle, and name of cycle
       return 1;
     }
     int StopWasher(string a) {
