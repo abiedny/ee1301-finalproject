@@ -42,8 +42,7 @@ function popupCycleBox() {
     modal.style.display = "block";
 }
 //I can hardly believe it but this shit is working?!
-//Now we need to make it so the added custom cycles persist...
-//Also once that happens we need to differentiate between users
+//uses cookies to save cycles, see other js files
 function createCycle() {
     var type = document.forms[0].elements.namedItem("type").value;
     var name = document.forms[0].elements.namedItem("cyclename").value;
@@ -59,6 +58,8 @@ function createCycle() {
         option.value = name + " " + speed + " " + time + " " + temp;
     }
     $("#cyclelist").append(option);
+    //The cookies for each created cycle are named the location of the user page, and data is the option variable
+    document.cookie = location.href + "=" + option.value;
     document.getElementById('createcyclebox').style.display = "none";
 }
 

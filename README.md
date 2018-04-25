@@ -1,11 +1,12 @@
--Name goes here-
-by Alex Biedny, Peter Linden, Jeremy Wood?
+Laundry of the Future
+by Alex Biedny, Peter Linden, Jeremy Wood
    
 A smart washer and dryer. Users can select preset wash/dry cycles, or create their own custom ones under their profiles. Any alerts from the washer or dryer send the user a text, and the status of each machine is displayed on the web app. The web app is used to control the machines and user profiles.
 
 Project file: (running list)
     particlecode.ino
     basescript.js
+    cycleloader.js
     home.css
     home.html
     user1.html
