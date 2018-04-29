@@ -19,10 +19,27 @@ function getCookie(name) {
     return decodeURI(dc.substring(begin + prefix.length, end));
 }
 
+//if the cookies ain't null, then load 'em
 $(document).ready(function() {
-    if (getCookie(location.href) != null) {
+    if (getCookie(location.href + "zero") != null) {
         var option = document.createElement("option");
-        option.value = getCookie(location.href);
+        option.value = getCookie(location.href + "zero");
+        var name = option.value.substr(0, option.value.indexOf(" "));
+        option.innerHTML = name;
+        $("#cyclelist").append(option);
+    }
+
+    if (getCookie(location.href + "one") != null) {
+        var option = document.createElement("option");
+        option.value = getCookie(location.href + "one");
+        var name = option.value.substr(0, option.value.indexOf(" "));
+        option.innerHTML = name;
+        $("#cyclelist").append(option);
+    }
+
+    if (getCookie(location.href + "two") != null) {
+        var option = document.createElement("option");
+        option.value = getCookie(location.href + "two");
         var name = option.value.substr(0, option.value.indexOf(" "));
         option.innerHTML = name;
         $("#cyclelist").append(option);

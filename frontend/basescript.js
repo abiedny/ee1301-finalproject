@@ -59,7 +59,15 @@ function createCycle() {
     }
     $("#cyclelist").append(option);
     //The cookies for each created cycle are named the location of the user page, and data is the option variable
-    document.cookie = location.href + "=" + option.value;
+    if ((getCookie(location.href + "zero") != null) && (getCookie(location.href + "one") === null)) {
+        document.cookie = location.href + "one" + "=" + option.value;
+    }
+    else if ((getCookie(location.href + "zero") != null) && (getCookie(location.href + "one") != null)) {
+        document.cookie = location.href + "two" + "=" + option.value;
+    }
+    else {
+        document.cookie = location.href + "zero" + "=" + option.value;
+    }
     document.getElementById('createcyclebox').style.display = "none";
 }
 
