@@ -3,7 +3,20 @@ function userLogin(username) {
     location.href = gotohere;
 }
 
-//WILL need to add ability for these to post the args
+function stopWasher() {
+    var setting = "stop";
+    var deviceID = "2f0059000e51353532343635";
+    var accessToken = "4dcf12c1f71b9601b0e988744eedbf79c14252af";
+    var baseURL = "https://api.particle.io/v1/devices/";
+    var funcName = "StopWasher";
+    requestURL = baseURL + deviceID + "/" + funcName + "/?access_token=" + accessToken;
+
+    $.post(requestURL, setting, function() {
+        alert("Washer stopped.");
+        //Right now this handler will return you to the homepage on a successfull POST, do we want that?
+    });
+}
+
 function runWasher() {
     setting = document.getElementById('cyclelist').value;
     var deviceID = "2f0059000e51353532343635";
@@ -14,8 +27,19 @@ function runWasher() {
 
     $.post(requestURL, setting, function() {
         alert("Success!");
-        //Right now this handler will return you to the homepage on a successfull POST, do we want that?
-        location.href = "home.html"
+    });
+}
+
+function stopDryer() {
+    var setting = "stop";
+    var deviceID = "2f0059000e51353532343635";
+    var accessToken = "4dcf12c1f71b9601b0e988744eedbf79c14252af";
+    var baseURL = "https://api.particle.io/v1/devices/";
+    var funcName = "StopDryer";
+    requestURL = baseURL + deviceID + "/" + funcName + "/?access_token=" + accessToken;
+
+    $.post(requestURL, setting, function() {
+        alert("Dryer stopped.");
     });
 }
 
