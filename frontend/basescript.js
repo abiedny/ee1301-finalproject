@@ -4,7 +4,7 @@ function userLogin(username) {
 }
 
 function stopWasher() {
-    var setting = "stop";
+    var setting = "1";
     var deviceID = "2f0059000e51353532343635";
     var accessToken = "4dcf12c1f71b9601b0e988744eedbf79c14252af";
     var baseURL = "https://api.particle.io/v1/devices/";
@@ -31,7 +31,7 @@ function runWasher() {
 }
 
 function stopDryer() {
-    var setting = "stop";
+    var setting = "1";
     var deviceID = "2f0059000e51353532343635";
     var accessToken = "4dcf12c1f71b9601b0e988744eedbf79c14252af";
     var baseURL = "https://api.particle.io/v1/devices/";
