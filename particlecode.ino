@@ -1,6 +1,7 @@
 #include <string>
 #include <iostream>
 #include <sstream>
+#include <ctime>
 using namespace std;
 
 // this is where the analog port would be identified
@@ -9,10 +10,10 @@ int dryerbutton;
 int washermotor;
 int washerbutton;
 
-bool dbuttonnow = FALSE;
-bool dbuttonlast = TRUE;
-bool wbuttonnow = FALSE;
-bool wbuttonlast = TRUE;
+bool dbuttonnow = false;
+bool dbuttonlast = true;
+bool wbuttonnow = false;
+bool wbuttonlast = true;
 
 // analog motor speed values 
 int high = 4095;
@@ -45,7 +46,7 @@ void washer::RunWasher(string bigkahuna) { //input must be one string in the for
     //streams out input string to individual settings
     string inname;
     int inspeed, incycletime, intemp;
-    sstream(bigkahuna) >> inname >> inspeed >> incycletime >> intemp;
+    stringstream(bigkahuna) >> inname >> inspeed >> incycletime >> intemp;
     cyclename = inname;
 
     //Interprets degree F values to one of three settings
@@ -87,7 +88,7 @@ void washer::RunWasher(string bigkahuna) { //input must be one string in the for
         //write red to the led
     }
     
-    analogWrite(washermotor, speed) //turns motor on
+    analogWrite(washermotor, speed); //turns motor on
     active = true;
 
     return;
@@ -124,7 +125,7 @@ void dryer::RunDryer(string bigkahuna) { //input must be one string in the form 
     //streams out input string to individual settings
     string inname;
     int inspeed, incycletime, intemp;
-    sstream(bigkahuna) >> inname >> inspeed >> incycletime;
+    stringstream(bigkahuna) >> inname >> inspeed >> incycletime;
     cyclename = inname;
 
     //time of cycle is just input time in seconds
@@ -145,7 +146,7 @@ void dryer::RunDryer(string bigkahuna) { //input must be one string in the form 
 
     cyclestarttime = 1000*millis();
 
-    analogWrite(dryermotor, speed) //turns motor on
+    analogWrite(dryermotor, speed); //turns motor on
     active = true;
 
     return;
@@ -189,7 +190,7 @@ void loop() {
             myWasher.cyclename = "Cycle Complete!"; //And resets this variable when cycle is done
             //turn led off //and turn the led off
             myWasher.active = false;
-            Particle.publish("WasherDone") //and publish event for buzzer and text
+            Particle.publish("WasherDone"); //and publish event for buzzer and text
             //buzzer for 2 seconds
         }
     }
