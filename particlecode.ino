@@ -1,70 +1,101 @@
 #include <string>
+#include <iostream>
 #include <sstream>
 using namespace std;
 
-#define DEFAULTWASHERTEMP 1
-#define DEFAULTWASHERSPEED 1
-#define DEFAULTDRYERTEMP 1
-#define WASHERSTOPBUTTON D0
-#define DRYERSTOPBUTTON D1
+ // this is where the analog port would be identified
+int dryermotor;
+int dryerbutton;
+int washermotor;
+int washerbutton;
 
-class dryer {
-  public:
-    int temp = DEFAULTDRYERTEMP;
-    string name;
-    string owner;
+bool dbuttonnow = FALSE;
+bool dbuttonlast = TRUE;
+bool wbuttonnow = FALSE;
+bool wbuttonlast = TRUE;
 
-    int CreateDryerProfile(string a) {
-      sstream(a) >> temp >> name;
-      return 1;
-    }
-    int RunDryer(string profile) { //This function and runwasher will accept a string in the form of "temp name"
-    //make sure to have a cloud variable that displays time left in cycle, and name of cycle
-      return 1;
-    }
-    int StopDryer(string a) {
-      return 1;
-    }
-} ;
+// analog motor speed values 
+int high = 4095;
+int medium = 2047;
+int low = 1023;
+
 class washer {
-  public:
-    int temp = DEFAULTWASHERTEMP, speed = DEFAULTWASHERSPEED;
-    string name;
-    string owner;
+    public:
+    int temp; // 0 - Low, 1 - Med, 2 - Hi
+    int cycle; // 10 - Short, 15 - Med, 20 - Hi
+    int speed; // 1023 - Low, 2047 - Med, 4095 - Hi
+    int remain; // Variable to read on java site for how much longer is in cycle
+    washer(); // default constructor
+    void RunWasher(string x, string y, string z); // input string: temperature, cycle length, cycle speed
+    void StopWasher(string x); };
+    washer::washer() {
+        temp = 0;
+        cycle = 0;
+        speed = 0;
+        remain = 0; };
 
-    int CreateWasherProfile(string a) {
-      sstream(a) >> temp >> speed >> name;
-      return 1;
-    }
-    int RunWasher(string profile) { //argument is string in the form of "length temp speed name"
-    //make sure to have a cloud variable that displays time left in cycle, and name of cycle
-      return 1;
-    }
-    int StopWasher(string a) {
-      return 1;
-    }
-} ;
+    void washer::RunWasher(string x, string y, string z) {
+        if(x == "1") {
+            temp = 1; } // Cold
+        else if(x == "2") {
+            temp = 2; } // Warm
+        else if(x == "3") {
+            temp = 3; } // Hot
+        
+        if(y == "1") {
+            cycle = 10; } // Short
+        else if(y == "2") { 
+            cycle = 15; } // Medium
+        else if(y == "3") {
+            cycle = 20; } // Long
+            
+        if(z == "1") {
+            speed = low; } // Low Speed
+        else if(z == "2") { 
+            speed = medium; } // Medium Speed
+        else if(z == "3") {
+            speed = high; } // High Speed
+        
+        unsigned long int seconds = 1000*millis();
+        remain = cycle - seconds;
+            while (seconds < cycle) {
+                analogWrite(washermotor, speed); }
+        
+        return;
+            };
+    void washer::StopWasher(string x) {
+        if(x == "1") {
+            cycle = 0;
+            remain = 0; } 
+        return; };
 
 void setup() {
-  washer myWasher;
-  dryer myDryer;
-  Particle.function("RunDryer", myDryer.RunDryer);
-  Particle.function("StopDryer", myDryer.StopDryer);
-  Particle.function("CreateDryerProfile", myDryer.CreateDryerProfile);
-  Particle.function("RunWasher", myWasher.RunWasher);
-  Particle.function("StopWasher", myWasher.StopWasher);
-  Particle.function("CreateWasherProfile", myWasher.CreateWasherProfile);
-  Particle.variable("owner", owner);
-  Particle.variable("")
+    
+    pinMode(washerbutton, INPUT_PULLDOWN);
+    pinMode(dryerbutton, INPUT_PULLDOWN);
+    
+    Serial.begin(9600);
+    Particle.function("RunWasher", washer.RunWasher);
+    Particle.function("StopWasher", washer.StopWasher);
+    Particle.variable("TimeRemaining", washer.remain);
 }
 
 void loop() {
-  //I think the loop only needs to be used for the physical buttons and stuff?
-  if (digitalRead(WASHERSTOPBUTTON) == HIGH) {
-    myWasher.StopWasher("Stop");
-  }
-
-  if (digitalRead(DRYERSTOPBUTTON) == HIGH) {
-    myDryer.StopDryer("Stop");
-  }
+    washer myWasher;
+    dbuttonnow = digitalRead(dryerbutton);
+    wbuttonnow = digitalRead(washerbutton);
+    
+    if(dbuttonnow == HIGH && dbuttonlast == LOW) { // Basically if the button is pressed, the dryer stop function should be called with an argument of 1
+        
+        myDryer.StopDryer("1");
+        dbuttonlast = HIGH; }
+    else if (dbuttonnow == LOW) {
+        dbuttonlast = LOW; }
+    
+    if(wbuttonnow == HIGH && wbuttonlast == LOW) { // Same thing but with the washer
+        
+        myWasher.StopWasher("1");
+        wbuttonlast = HIGH; }
+    else if (wbuttonnow == LOW) {
+        wbuttonlast = LOW; }
 }
