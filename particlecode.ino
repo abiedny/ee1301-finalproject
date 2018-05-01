@@ -1,180 +1,176 @@
-#include <string>
-#include <iostream>
+//THIS IS COMPILING SUCCESSFULLY!!!
 #include <sstream>
-#include <ctime>
-using namespace std;
+#include <neopixel.h>
 
-// this is where the analog port would be identified
-int dryermotor;
-int dryerbutton;
-int washermotor;
-int washerbutton;
+#define dryermotor D0
+#define dryerbutton D1
+#define washermotor D2
+#define washerbutton D3
+
+#define PIXEL_PIN D4
+#define PIXEL_COUNT 1
+#define PIXEL_TYPE WS2811
+
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(PIXEL_COUNT, PIXEL_PIN, PIXEL_TYPE);
 
 bool dbuttonnow = false;
 bool dbuttonlast = true;
 bool wbuttonnow = false;
 bool wbuttonlast = true;
 
-// analog motor speed values 
 int high = 4095;
 int medium = 2047;
 int low = 1023;
 
-class washer {
-    public:
-        int temp; // 0 - Low, 1 - Med, 2 - Hi
-        int cycle; // 10 - Short, 15 - Med, 20 - Hi
-        int speed; // 1023 - Low, 2047 - Med, 4095 - Hi
-        int remain; // Variable to read on java site for how much longer is in cycle
-        unsigned long int cyclestarttime;
-        string cyclename;
-        bool active;
-        washer(); // default constructor
-        void RunWasher(string bigkahuna); // input string: temperature, cycle length, cycle speed
-        void StopWasher(string x); 
-};
-washer::washer() {
-    temp = 0;
-    cycle = 0;
-    speed = 0;
-    remain = 0;
-    cyclename = "No current cycle";
-    active = false;
-    cyclestarttime = 0;
-}
-void washer::RunWasher(string bigkahuna) { //input must be one string in the form of "name speed time temp"
+
+int washertemp = 0;
+int washercycle= 0;
+int washerspeed = 0;
+int washerremain = 0;
+unsigned long int washercyclestarttime = 0;
+String washercyclename = "No Current Cycle.";
+bool washeractive = false; 
+
+int RunWasher(String bigkahuna) { //input must be one string in the form of "name speed time temp"
     //streams out input string to individual settings
-    string inname;
+    String inname;
     int inspeed, incycletime, intemp;
-    stringstream(bigkahuna) >> inname >> inspeed >> incycletime >> intemp;
-    cyclename = inname;
+    //new method
+    int a = bigkahuna.indexOf(" ");
+    inname = bigkahuna.substring(0, a);
+    int b = bigkahuna.indexOf(" ", a + 1);
+    inspeed = bigkahuna.substring(a + 1, b).toInt();
+    int c = bigkahuna.indexOf(" ", b + 1);
+    incycletime = bigkahuna.substring(b + 1, c).toInt();
+    intemp = bigkahuna.substring(c).toInt();
+    
+    washercyclename = inname;
 
     //Interprets degree F values to one of three settings
     if(intemp < 85) {
-        temp = 1; 
+        washertemp = 1; 
     } // Cold
     else if((intemp >= 85) && (intemp < 110)) {
-        temp = 2; 
+        washertemp = 2; 
     } // Warm
     else if(intemp >= 110) {
-        temp = 3;
+        washertemp = 3;
     } // Hot
     
     //time of cycle is just input time in seconds
-    cycle = incycletime;
+    washercycle = incycletime;
             
     //Inputs of 1, 2, or 3 correspond to 3 speed settings
     if(inspeed == 1) {
-        speed = low; 
+        washerspeed = low; 
     } // Low Speed
     else if(inspeed == 2) { 
-        speed = medium; 
+        washerspeed = medium; 
     } // Medium Speed
     else if(inspeed == 3) {
-        speed = high; 
+        washerspeed = high; 
     } // High Speed
 
     //NOW all variables are assigned, to actually run it
 
-    cyclestarttime = 1000*millis();
+    washercyclestarttime = 1000*millis();
 
-    if (temp == 1) {
-        //write blue to the led
+    int red = strip.Color(255, 0, 0);
+    int yellow = strip.Color(255, 255, 0);
+    int blue = strip.Color(0, 0, 255);
+    
+    if (washertemp == 1) {
+        strip.setPixelColor(0, blue);
+        strip.show();
     }
-    else if (temp == 2) {
-        //write yellow to the led
+    else if (washertemp == 2) {
+        strip.setPixelColor(0, yellow);
+        strip.show();
     }
-    else if (temp == 3) {
-        //write red to the led
+    else if (washertemp == 3) {
+        strip.setPixelColor(0, red);
+        strip.show();
     }
     
-    analogWrite(washermotor, speed); //turns motor on
-    active = true;
+    analogWrite(washermotor, washerspeed); //turns motor on
+    washeractive = true;
 
-    return;
+    return 1;
 }
-void washer::StopWasher(string x) {
+int StopWasher(String x) {
     if(x == "1") {
-        cycle = 0;
-        remain = 0; 
+        washercycle = 0;
+        washerremain = 0; 
     } 
-    return;
+    return 1;
 }
 
-class dryer {
-    public:
-        int cycle; // 10 - Short, 15 - Med, 20 - Hi
-        int speed; // 1023 - Low, 2047 - Med, 4095 - Hi
-        int remain; // Variable to read on java site for how much longer is in cycle
-        unsigned long int cyclestarttime;
-        string cyclename;
-        bool active;
-        dryer(); // default constructor
-        void RunDryer(string bigkahuna); // input string: temperature, cycle length, cycle speed
-        void StopDryer(string x); 
-};
-dryer::dryer() {
-    cycle = 0;
-    speed = 0;
-    remain = 0;
-    cyclename = "No current cycle";
-    active = false;
-    cyclestarttime = 0;
-}
-void dryer::RunDryer(string bigkahuna) { //input must be one string in the form of "name speed time"
+
+int dryercycle = 0; // 10 - Short, 15 - Med, 20 - Hi
+int dryerspeed = 0; // 1023 - Low, 2047 - Med, 4095 - Hi
+int dryerremain = 0; // Variable to read on java site for how much longer is in cycle
+unsigned long int dryercyclestarttime = 0;
+String dryercyclename = "No Current Cycle";
+bool dryeractive = false;
+
+int RunDryer(String bigkahuna) { //input must be one string in the form of "name speed time"
     //streams out input string to individual settings
-    string inname;
-    int inspeed, incycletime, intemp;
-    stringstream(bigkahuna) >> inname >> inspeed >> incycletime;
-    cyclename = inname;
+    String inname;
+    int inspeed, incycletime;
+    
+    //new method
+    int a = bigkahuna.indexOf(" ");
+    inname = bigkahuna.substring(0, a);
+    int b = bigkahuna.indexOf(" ", a + 1);
+    inspeed = bigkahuna.substring(a + 1, b).toInt();
+    incycletime = bigkahuna.substring(b + 1).toInt();
+    
+    dryercyclename = inname;
 
     //time of cycle is just input time in seconds
-    cycle = incycletime;
+    dryercycle = incycletime;
             
     //Inputs of 1, 2, or 3 correspond to 3 speed settings
     if(inspeed == 1) {
-        speed = low; 
+        dryerspeed = low; 
     } // Low Speed
     else if(inspeed == 2) { 
-        speed = medium; 
+        dryerspeed = medium; 
     } // Medium Speed
     else if(inspeed == 3) {
-        speed = high; 
+        dryerspeed = high; 
     } // High Speed
 
     //NOW all variables are assigned, to actually run it
 
-    cyclestarttime = 1000*millis();
+    dryercyclestarttime = 1000*millis();
 
-    analogWrite(dryermotor, speed); //turns motor on
-    active = true;
+    analogWrite(dryermotor, dryerspeed); //turns motor on
+    dryeractive = true;
 
-    return;
+    return 1;
 }
-void dryer::StopDryer(string x) {
+int StopDryer(String x) {
     if(x == "1") {
-        cycle = 0;
-        remain = 0; 
+        dryercycle = 0;
+        dryerremain = 0; 
     } 
-    return;
+    return 1;
 }
 
 void setup() {
-    washer myWasher;
-    dryer myDryer;
-
     pinMode(washerbutton, INPUT_PULLDOWN);
     pinMode(dryerbutton, INPUT_PULLDOWN);
     
     Serial.begin(9600);
-    Particle.function("RunWasher", myWasher.RunWasher);
-    Particle.function("StopWasher", myWasher.StopWasher);
-    Particle.variable("WasherTimeLeft", myWasher.remain);
-    Particle.variable("WasherCycle", myWasher.cyclename);
-    Particle.function("RunDryer", myDryer.RunDryer);
-    Particle.function("StopDryer", myDryer.StopDryer);
-    Particle.variable("DryerTimeLeft", myDryer.remain);
-    Particle.variable("DryerCycle", myDryer.cyclename);
+    Particle.function("RunWasher", RunWasher);
+    Particle.function("StopWasher", StopWasher);
+    Particle.variable("WTimeLeft", washerremain);
+    Particle.variable("WasherCycle", washercyclename);
+    Particle.function("RunDryer", RunDryer);
+    Particle.function("StopDryer", StopDryer);
+    Particle.variable("DTimeLeft", dryerremain);
+    Particle.variable("DryerCycle", dryercyclename);
 }
 
 void loop() {
@@ -183,31 +179,31 @@ void loop() {
     wbuttonnow = digitalRead(washerbutton);
 
     //if washer is on, watches for when to turn it off without blocking. Has to be in loop to do so. Aslo updates remain
-    if (myWasher.active == true) {
-        myWasher.remain = (myWasher.cyclestarttime + myWasher.cycle - currenttime);
-        if (myWasher.remain <= 0) {
+    if (washeractive == true) {
+        washerremain = (washercyclestarttime + washercycle - currenttime);
+        if (washerremain <= 0) {
             analogWrite(washermotor, 0); //turns it off when cycle is done
-            myWasher.cyclename = "Cycle Complete!"; //And resets this variable when cycle is done
+            washercyclename = "Cycle Complete!"; //And resets this variable when cycle is done
             //turn led off //and turn the led off
-            myWasher.active = false;
-            Particle.publish("WasherDone"); //and publish event for buzzer and text
+            washeractive = false;
+            Particle.publish("WasherDone", "done", 60, PUBLIC); //and publish event for buzzer and text
             //buzzer for 2 seconds
         }
     }
     //same thing but with the dryer
-    if (myDryer.active == true) {
-        myDryer.remain = (myDryer.cyclestarttime + myDryer.cycle - currenttime);
-        if (myDryer.remain <= 0) {
+    if (dryeractive == true) {
+        dryerremain = (dryercyclestarttime + dryercycle - currenttime);
+        if (dryerremain <= 0) {
             analogWrite(dryermotor, 0); //turns it off when cycle is done
-            myDryer.cyclename = "Cycle Complete!"; //And resets this variable when cycle is done
-            myDryer.active = false;
-            Particle.publish("DryerDone");
+            dryercyclename = "Cycle Complete!"; //And resets this variable when cycle is done
+            dryeractive = false;
+            Particle.publish("DryerDone", "done", 60, PUBLIC);
             //buzzer for 2 seconds
         }
     }
     
     if(dbuttonnow == HIGH && dbuttonlast == LOW) { // Basically if the button is pressed, the dryer stop function should be called with an argument of 1
-        myDryer.StopDryer("1");
+        StopDryer("1");
         dbuttonlast = HIGH; 
     }
     else if (dbuttonnow == LOW) {
@@ -215,7 +211,7 @@ void loop() {
     }
     
     if(wbuttonnow == HIGH && wbuttonlast == LOW) { // Same thing but with the washer
-        myWasher.StopWasher("1");
+        StopWasher("1");
         wbuttonlast = HIGH; 
     }
     else if (wbuttonnow == LOW) {
