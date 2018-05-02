@@ -1,11 +1,13 @@
+//THIS IS COMPILING SUCCESSFULLY!!
 //THIS IS COMPILING SUCCESSFULLY!!!
+//Like this code is gucci
 #include <sstream>
 #include <neopixel.h>
 
-#define dryermotor D0
-#define dryerbutton D1
-#define washermotor D2
-#define washerbutton D3
+#define dryermotor D3
+#define dryerbutton D2
+#define washermotor D0
+#define washerbutton D6
 
 #define PIXEL_PIN D4
 #define PIXEL_COUNT 1
@@ -13,14 +15,14 @@
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(PIXEL_COUNT, PIXEL_PIN, PIXEL_TYPE);
 
-bool dbuttonnow = false;
-bool dbuttonlast = true;
-bool wbuttonnow = false;
-bool wbuttonlast = true;
+bool dbuttonnow = LOW;
+bool dbuttonlast = LOW;
+bool wbuttonnow = LOW;
+bool wbuttonlast = LOW;
 
-int high = 4095;
-int medium = 2047;
-int low = 1023;
+int high = 75;
+int medium = 50;
+int low = 25;
 
 
 int washertemp = 0;
@@ -73,7 +75,7 @@ int RunWasher(String bigkahuna) { //input must be one string in the form of "nam
 
     //NOW all variables are assigned, to actually run it
 
-    washercyclestarttime = 1000*millis();
+    washercyclestarttime = millis();
 
     int red = strip.Color(255, 0, 0);
     int yellow = strip.Color(255, 255, 0);
@@ -97,6 +99,14 @@ int RunWasher(String bigkahuna) { //input must be one string in the form of "nam
 
     return 1;
 }
+int test(String a) {
+    analogWrite(D3, 50);
+    analogWrite(D3, 50);
+    delay(2000);
+    analogWrite(D3, 0);
+    analogWrite(D3, 0);
+}
+
 int StopWasher(String x) {
     if(x == "1") {
         washercycle = 0;
@@ -143,7 +153,7 @@ int RunDryer(String bigkahuna) { //input must be one string in the form of "name
 
     //NOW all variables are assigned, to actually run it
 
-    dryercyclestarttime = 1000*millis();
+    dryercyclestarttime = millis();
 
     analogWrite(dryermotor, dryerspeed); //turns motor on
     dryeractive = true;
@@ -161,8 +171,13 @@ int StopDryer(String x) {
 void setup() {
     pinMode(washerbutton, INPUT_PULLDOWN);
     pinMode(dryerbutton, INPUT_PULLDOWN);
+    pinMode(D0, OUTPUT);
+    pinMode(D1, OUTPUT);
+    pinMode(D3, OUTPUT);
+    strip.begin();
     
     Serial.begin(9600);
+    Particle.function("test", test);
     Particle.function("RunWasher", RunWasher);
     Particle.function("StopWasher", StopWasher);
     Particle.variable("WTimeLeft", washerremain);
@@ -174,20 +189,24 @@ void setup() {
 }
 
 void loop() {
-    unsigned long int currenttime = 1000*millis();
+    unsigned long int currenttime = millis();
     dbuttonnow = digitalRead(dryerbutton);
     wbuttonnow = digitalRead(washerbutton);
 
     //if washer is on, watches for when to turn it off without blocking. Has to be in loop to do so. Aslo updates remain
     if (washeractive == true) {
         washerremain = (washercyclestarttime + washercycle - currenttime);
+        Serial.println(washercyclestarttime);
+        Serial.println(washercycle);
+        Serial.println(currenttime);
         if (washerremain <= 0) {
             analogWrite(washermotor, 0); //turns it off when cycle is done
             washercyclename = "Cycle Complete!"; //And resets this variable when cycle is done
-            //turn led off //and turn the led off
+            strip.setPixelColor(0, 0);
+            strip.show();
             washeractive = false;
-            Particle.publish("WasherDone", "done", 60, PUBLIC); //and publish event for buzzer and text
-            //buzzer for 2 seconds
+            Particle.publish("WasherDone", "done", 60, PUBLIC);
+            tone(D1, 440, 2000);
         }
     }
     //same thing but with the dryer
@@ -198,11 +217,11 @@ void loop() {
             dryercyclename = "Cycle Complete!"; //And resets this variable when cycle is done
             dryeractive = false;
             Particle.publish("DryerDone", "done", 60, PUBLIC);
-            //buzzer for 2 seconds
+            tone(D1, 440, 2000);
         }
     }
     
-    if(dbuttonnow == HIGH && dbuttonlast == LOW) { // Basically if the button is pressed, the dryer stop function should be called with an argument of 1
+    if((dbuttonnow == HIGH) && (dbuttonlast == LOW)) { // Basically if the button is pressed, the dryer stop function should be called with an argument of 1
         StopDryer("1");
         dbuttonlast = HIGH; 
     }

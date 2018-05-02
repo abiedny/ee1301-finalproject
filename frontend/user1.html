@@ -5,19 +5,19 @@
         <script type="text/javascript" charset="utf-8" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script type="text/javascript" src="basescript.js" charset="utf-8"></script>
         <script type="text/javascript" src="cycleloader.js" charset="utf-8"></script>
-        <title>Whatever We Wanna Call This...</title>
+        <title>Laundry Dashboard</title>
     </head>
     <h1 class="header titlebar">Laundry of the future</h2>
     <div class="menubar">The next generation of clothing sanitation technology</div>
     <body>
     <div class="column">
-        <h1 class="titlebar">Welcome, User 1</h1>
+        <h1 class="titlebar">Welcome, Alex</h1>
         <p class="explaintext">Select a cycle, and run it</p>
         <select id="cyclelist">
             <option value="" disabled="disabled" selected="selected">Please select a cycle</option>
-            <option value="whatever we want">Custom Wash Cycle 1</option>
-            <option value="whatever we want">Custom Dryer Cycle 2</option>
-            <option value="whatever we want">Custom Whatever 3</option>
+            <option value="CottonWasher 2 10000 100">Cotton Wahsher Cycle</option>
+            <option value="CottonDryer 2 10000">Cotton Dryer Cycle</option>
+            <option value="BleedSafeWash 1 10000 80">Color Bleed Safe Wash</option>
         </select>
         <button onclick="runWasher()">Wash!</button>
         <button onclick="runDryer()">Dry!</button>
@@ -47,8 +47,10 @@
                 <input type="text" name="cyclename"><br>
                 Cycle Time (seconds):<br>
                 <input type="text" name="time"><br> 
-                Cycle Speed (change to radios for three speeds (1,2,3)):<br>
-                <input type="text" name="speed"><br>
+                Cycle Speed:<br>
+                <input type="radio" name="speed" value="1"> Slow
+                <input type="radio" name="speed" value="2"> Medium 
+                <input type="radio" name="speed" value="3"> Fast <br>
                 Cycle Temp (degrees F) (washers only):<br>
                 <input type="text" name="temp">
             </form>

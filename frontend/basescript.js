@@ -9,9 +9,9 @@ function stopWasher() {
     var accessToken = "4dcf12c1f71b9601b0e988744eedbf79c14252af";
     var baseURL = "https://api.particle.io/v1/devices/";
     var funcName = "StopWasher";
-    requestURL = baseURL + deviceID + "/" + funcName + "/?access_token=" + accessToken;
+    stopWrequestURL = baseURL + deviceID + "/" + funcName + "/?access_token=" + accessToken;
 
-    $.post(requestURL, setting, function() {
+    $.post(stopWrequestURL, {"args":setting}, function() {
         alert("Washer stopped.");
         //Right now this handler will return you to the homepage on a successfull POST, do we want that?
     });
@@ -23,10 +23,23 @@ function runWasher() {
     var accessToken = "4dcf12c1f71b9601b0e988744eedbf79c14252af";
     var baseURL = "https://api.particle.io/v1/devices/";
     var funcName = "RunWasher";
-    requestURL = baseURL + deviceID + "/" + funcName + "/?access_token=" + accessToken;
+    runWrequestURL = baseURL + deviceID + "/" + funcName + "/?access_token=" + accessToken;
 
-    $.post(requestURL, setting, function() {
+    $.post(runWrequestURL, {"args":setting}, function() {
         alert("Success!");
+        location.href = "home.html";
+    });
+}
+function runWasherPreset(setting) {
+    var deviceID = "2f0059000e51353532343635";
+    var accessToken = "4dcf12c1f71b9601b0e988744eedbf79c14252af";
+    var baseURL = "https://api.particle.io/v1/devices/";
+    var funcName = "RunWasher";
+    runWPrequestURL = baseURL + deviceID + "/" + funcName + "/?access_token=" + accessToken;
+
+    $.post(runWPrequestURL, {"args":setting}, function() {
+        alert("Success!");
+        location.href = "home.html";
     });
 }
 
@@ -36,9 +49,9 @@ function stopDryer() {
     var accessToken = "4dcf12c1f71b9601b0e988744eedbf79c14252af";
     var baseURL = "https://api.particle.io/v1/devices/";
     var funcName = "StopDryer";
-    requestURL = baseURL + deviceID + "/" + funcName + "/?access_token=" + accessToken;
+    stopDrequestURL = baseURL + deviceID + "/" + funcName + "/?access_token=" + accessToken;
 
-    $.post(requestURL, setting, function() {
+    $.post(stopDrequestURL, {"args":setting}, function() {
         alert("Dryer stopped.");
     });
 }
@@ -49,9 +62,22 @@ function runDryer() {
     var accessToken = "4dcf12c1f71b9601b0e988744eedbf79c14252af";
     var baseURL = "https://api.particle.io/v1/devices/";
     var funcName = "RunDryer";
-    requestURL = baseURL + deviceID + "/" + funcName + "/?access_token=" + accessToken;
+    runDrequestURL = baseURL + deviceID + "/" + funcName + "/?access_token=" + accessToken;
 
-    $.post(requestURL, setting, function() {
+    $.post(runDrequestURL, {"args":setting}, function() {
+        alert("Success!");
+        //same thing here
+        location.href = "home.html";
+    });
+}
+function runDryerPreset(setting) {
+    var deviceID = "2f0059000e51353532343635";
+    var accessToken = "4dcf12c1f71b9601b0e988744eedbf79c14252af";
+    var baseURL = "https://api.particle.io/v1/devices/";
+    var funcName = "RunDryer";
+    runDPrequestURL = baseURL + deviceID + "/" + funcName + "/?access_token=" + accessToken;
+
+    $.post(runDPrequestURL, {"args":setting}, function() {
         alert("Success!");
         //same thing here
         location.href = "home.html";
@@ -104,34 +130,30 @@ $(document).ready(function() {
 
     //ALL OF THESE NEED TO BE CLOUD VARIABLES AND ADDED TO THE C++
     //Washer time left
-    var varName = "WasherTimeLeft";
-    requestURL = baseURL + deviceID + "/" + varName + "/?access_token=" + accessToken;
+    WRrequestURL = baseURL + deviceID + "/" + "WTimeLeft" + "/?access_token=" + accessToken;
     setInterval(function() {
-        $.getJSON(requestURL, function(json) {
+        $.getJSON(WRrequestURL, function(json) {
             $("#washerdata").html("Time left: " + json.result);
         })}, 900);
 
     //Dryer time left
-    varName = "DryerTimeLeft";
-    requestURL = baseURL + deviceID + "/" + varName + "/?access_token=" + accessToken;
+    DRrequestURL = baseURL + deviceID + "/" + "DTimeLeft" + "/?access_token=" + accessToken;
     setInterval(function() {
-        $.getJSON(requestURL, function(json) {
+        $.getJSON(DRrequestURL, function(json) {
             $("#dryerdata").html("Time left: " + json.result);
         })}, 900);
 
     //Current washer cycle
-    varName = "WasherCycle"
-    requestURL = baseURL + deviceID + "/" + varName + "/?access_token=" + accessToken;
+    WCrequestURL = baseURL + deviceID + "/" + "WasherCycle" + "/?access_token=" + accessToken;
     setInterval(function() {
-        $.getJSON(requestURL, function(json) {
+        $.getJSON(WCrequestURL, function(json) {
             $("#washercycle").html("Current Cycle: " + json.result);
         })}, 900);
     
     //Current dryer cycle
-    varName = "DryerCycle"
-    requestURL = baseURL + deviceID + "/" + varName + "/?access_token=" + accessToken;
+    DCrequestURL = baseURL + deviceID + "/" + "DryerCycle" + "/?access_token=" + accessToken;
     setInterval(function() {
-        $.getJSON(requestURL, function(json) {
+        $.getJSON(DCrequestURL, function(json) {
             $("#dryercycle").html("Current Cycle: " + json.result);
         })}, 900);
 
