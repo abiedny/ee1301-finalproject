@@ -1,7 +1,6 @@
 //THIS IS COMPILING SUCCESSFULLY!!
 //THIS IS COMPILING SUCCESSFULLY!!!
 //Like this code is gucci
-#include <sstream>
 #include <neopixel.h>
 
 #define dryermotor D3
@@ -24,7 +23,7 @@ int high = 75;
 int medium = 50;
 int low = 25;
 
-
+//dont have to pass references if all of your variables are global
 int washertemp = 0;
 int washercycle= 0;
 int washerspeed = 0;
@@ -37,7 +36,8 @@ int RunWasher(String bigkahuna) { //input must be one string in the form of "nam
     //streams out input string to individual settings
     String inname;
     int inspeed, incycletime, intemp;
-    //new method
+    //new method w/o stringstream
+    //pesky particle string objects
     int a = bigkahuna.indexOf(" ");
     inname = bigkahuna.substring(0, a);
     int b = bigkahuna.indexOf(" ", a + 1);
@@ -99,13 +99,6 @@ int RunWasher(String bigkahuna) { //input must be one string in the form of "nam
 
     return 1;
 }
-int test(String a) {
-    analogWrite(D3, 50);
-    analogWrite(D3, 50);
-    delay(2000);
-    analogWrite(D3, 0);
-    analogWrite(D3, 0);
-}
 
 int StopWasher(String x) {
     if(x == "1") {
@@ -116,9 +109,9 @@ int StopWasher(String x) {
 }
 
 
-int dryercycle = 0; // 10 - Short, 15 - Med, 20 - Hi
-int dryerspeed = 0; // 1023 - Low, 2047 - Med, 4095 - Hi
-int dryerremain = 0; // Variable to read on java site for how much longer is in cycle
+int dryercycle = 0;
+int dryerspeed = 0;
+int dryerremain = 0; // Variable to read on site for how much longer is in cycle
 unsigned long int dryercyclestarttime = 0;
 String dryercyclename = "No Current Cycle";
 bool dryeractive = false;
@@ -127,7 +120,6 @@ int RunDryer(String bigkahuna) { //input must be one string in the form of "name
     //streams out input string to individual settings
     String inname;
     int inspeed, incycletime;
-    
     //new method
     int a = bigkahuna.indexOf(" ");
     inname = bigkahuna.substring(0, a);
@@ -177,7 +169,6 @@ void setup() {
     strip.begin();
     
     Serial.begin(9600);
-    Particle.function("test", test);
     Particle.function("RunWasher", RunWasher);
     Particle.function("StopWasher", StopWasher);
     Particle.variable("WTimeLeft", washerremain);
@@ -189,6 +180,7 @@ void setup() {
 }
 
 void loop() {
+    //timer and button stuff
     unsigned long int currenttime = millis();
     dbuttonnow = digitalRead(dryerbutton);
     wbuttonnow = digitalRead(washerbutton);
@@ -196,15 +188,13 @@ void loop() {
     //if washer is on, watches for when to turn it off without blocking. Has to be in loop to do so. Aslo updates remain
     if (washeractive == true) {
         washerremain = (washercyclestarttime + washercycle - currenttime);
-        Serial.println(washercyclestarttime);
-        Serial.println(washercycle);
-        Serial.println(currenttime);
         if (washerremain <= 0) {
             analogWrite(washermotor, 0); //turns it off when cycle is done
             washercyclename = "Cycle Complete!"; //And resets this variable when cycle is done
             strip.setPixelColor(0, 0);
             strip.show();
             washeractive = false;
+            //So apparently publish only works when all of the parameters are defined?? idk it won't compile otherwise
             Particle.publish("WasherDone", "done", 60, PUBLIC);
             tone(D1, 440, 2000);
         }
@@ -221,6 +211,7 @@ void loop() {
         }
     }
     
+    //Button code, just calls the stop washer or dryer function if either is pressed. Also is debounced successfully!
     if((dbuttonnow == HIGH) && (dbuttonlast == LOW)) { // Basically if the button is pressed, the dryer stop function should be called with an argument of 1
         StopDryer("1");
         dbuttonlast = HIGH; 
