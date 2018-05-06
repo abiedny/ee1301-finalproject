@@ -20,4 +20,4 @@ A smart washer and dryer. Users can select preset wash/dry cycles, or create the
 **Files are also at https://github.com/biedn001/ee1301-finalproject.git in their latest iteration**
 
 ###### Circuit Diagram:
-
+![alt text](https://github.com/biedn001/ee1301-finalproject/edit/master/schematic.png "Circuit Schematic")
